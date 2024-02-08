@@ -37,6 +37,9 @@ dev_dependencies:
   flashy_tab_bar2: ^0.0.6
   avatar_glow: ^2.0.2
   speech_to_text: ^6.5.1
+  fluttertoast: ^8.0.7
+
+
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
