@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:lawer_finder/app.dart';
 import 'package:lawer_finder/app/constants.dart';
 import 'package:lawer_finder/app/theme.dart';
 import 'package:lawer_finder/utils/theme/theme.dart';

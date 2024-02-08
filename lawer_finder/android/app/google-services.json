@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "558258187506",
+    "project_id": "lawer-finder-dcbf7",
+    "storage_bucket": "lawer-finder-dcbf7.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:558258187506:android:a981b3c310dd6135c3346b",
+        "android_client_info": {
+          "package_name": "com.example.lawer_finder"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAYlHJqfkt0E12wbzsiVfu72TZ0iXpcjiY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

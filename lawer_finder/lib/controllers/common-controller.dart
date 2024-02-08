@@ -4,10 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lawer_finder/app/routes.dart';
 import 'package:lawer_finder/views/home/home-view.dart';
+import 'package:lawer_finder/views/lawer%20list%20screen/lawer_list_screen.dart';
+import 'package:lawer_finder/views/profile/profile_screen.dart';
 
 class CommonController extends GetxController {
   //bottom-nav
-  List page = [const HomeView(), Container(), Container(), Container()];
+  List page = [const HomeView(), LawerListScreen(), ProfileScreen()];
   var selectePageIndex = 0.obs;
 
   //bottom-action
