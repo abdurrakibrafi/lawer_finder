@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'package:flutter/material.dart';
 import 'package:lawer_finder/app/constants.dart';
 import 'package:lawer_finder/app/theme.dart';
@@ -158,6 +160,22 @@ class _HomeViewState extends State<HomeView> {
                 ],
               ),
               box(20),
+              SizedBox(
+                width: 80,
+                height: 56,
+                child: FloatingActionButton.small(
+                  onPressed: _speechToText.isNotListening
+                      ? _startListening
+                      : _stopListening,
+                  tooltip: 'Listen',
+                  backgroundColor: Colors.blueGrey,
+                  child: Icon(
+                    _speechToText.isNotListening ? Icons.mic_off : Icons.mic,
+                    color: Colors.amber,
+                    size: 40,
+                  ),
+                ),
+              ),
               const Expanded(child: SizedBox()),
               bottomWidget()
             ],
@@ -194,6 +212,9 @@ class _HomeViewState extends State<HomeView> {
                         minLines: 1,
                         maxLines: 1,
                         decoration: InputDecoration(
+                          hintText: 'Input Voice or text.....',
+                          hintStyle:
+                              TextStyle(fontSize: 14, color: Colors.white),
                           filled: true,
                           fillColor: AppTheme.whiteColor.withOpacity(0.2),
                         ),
@@ -202,20 +223,10 @@ class _HomeViewState extends State<HomeView> {
                     const SizedBox(
                       width: 8,
                     ),
-                    FloatingActionButton.small(
-                      onPressed:
-                          // If not yet listening for speech start, otherwise stop
-                          _speechToText.isNotListening
-                              ? _startListening
-                              : _stopListening,
-                      tooltip: 'Listen',
-                      backgroundColor: Colors.blueGrey,
-                      child: Icon(
-                        _speechToText.isNotListening
-                            ? Icons.mic_off
-                            : Icons.mic,
-                        color: Colors.amber,
-                      ),
+                    Icon(
+                      Icons.send,
+                      color: Colors.amber,
+                      size: 32,
                     )
                   ],
                 ),
