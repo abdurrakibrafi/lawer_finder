@@ -38,6 +38,7 @@ dev_dependencies:
   avatar_glow: ^2.0.2
   speech_to_text: ^6.5.1
   fluttertoast: ^8.0.7
+  permission_handler: ^9.2.0
 
 
 

@@ -5,6 +5,7 @@ import 'package:lawer_finder/app/constants.dart';
 import 'package:lawer_finder/app/theme.dart';
 import 'package:lawer_finder/widgets/custom_rich_text.dart';
 import 'package:lawer_finder/widgets/text.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class LawerListScreen extends StatefulWidget {
   const LawerListScreen({Key? key}) : super(key: key);
@@ -52,64 +53,80 @@ class _LawerListScreenState extends State<LawerListScreen> {
                 ),
               ],
             ),
-            child: ListView.separated(
-              itemCount: 5,
-              separatorBuilder: (context, index) => Divider(
-                color: Colors.grey, // Customize the color of the divider
-                height: 1, // Adjust the height of the divider
-              ),
-              itemBuilder: (context, index) {
-                return Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: SizedBox(
-                    child: Padding(
-                      padding: const EdgeInsets.all(5.0),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          CustomRichText(
-                            title: 'Lawer Name:',
-                            subtitle: 'dfhdf',
-                          ),
-                          CustomRichText(
-                            title: 'Phone:',
-                            subtitle: 'fhdfgh',
-                          ),
-                          CustomRichText(
-                            title: 'Case Handle Area:',
-                            subtitle: 'fhdfgh',
-                          ),
-                          CustomRichText(
-                            title: 'Office Location',
-                            subtitle: 'ghjrfg',
-                          ),
-                          SizedBox(
-                            height: 10,
-                          ),
-                          Row(
+            child: StreamBuilder<QuerySnapshot>(
+              stream: FirebaseFirestore.instance
+                  .collection('lawer_list')
+                  .snapshots(),
+              builder: (context, snapshot) {
+                if (snapshot.hasError) {
+                  return Text('Error: ${snapshot.error}');
+                }
+
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return CircularProgressIndicator();
+                }
+
+                return ListView.separated(
+                  itemCount: snapshot.data!.docs.length,
+                  separatorBuilder: (context, index) => Divider(
+                    color: Colors.grey,
+                    height: 1,
+                  ),
+                  itemBuilder: (context, index) {
+                    var lawerData = snapshot.data!.docs[index];
+                    return Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: SizedBox(
+                        child: Padding(
+                          padding: const EdgeInsets.all(5.0),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              ElevatedButton(
-                                onPressed: () {
-                                  // Handle button press
-                                },
-                                child: Text("Hire Me"),
+                              CustomRichText(
+                                title: 'Lawer Name:',
+                                subtitle: lawerData['lawer_name'],
+                              ),
+                              CustomRichText(
+                                title: 'Phone:',
+                                subtitle: lawerData['phone'],
+                              ),
+                              CustomRichText(
+                                title: 'Case Handle Area:',
+                                subtitle: lawerData['case'],
+                              ),
+                              CustomRichText(
+                                title: 'Office Location',
+                                subtitle: lawerData['office'],
                               ),
                               SizedBox(
-                                width: 20,
+                                height: 10,
                               ),
-                              ElevatedButton(
-                                onPressed: () {
-                                  // Handle button press
-                                },
-                                child: Text("Call Me"),
+                              Row(
+                                children: [
+                                  ElevatedButton(
+                                    onPressed: () {
+                                      // Implement your hire logic
+                                    },
+                                    child: Text("Hire Me"),
+                                  ),
+                                  SizedBox(
+                                    width: 20,
+                                  ),
+                                  ElevatedButton(
+                                    onPressed: () {
+                                      // Implement your call logic
+                                    },
+                                    child: Text("Call Me"),
+                                  ),
+                                ],
                               ),
                             ],
                           ),
-                        ],
+                        ),
                       ),
-                    ),
-                  ),
+                    );
+                  },
                 );
               },
             ),

@@ -91,7 +91,7 @@ class InfoArea extends StatelessWidget {
                         text: "Not Have an Account Yet? ",
                         children: [
                       TextSpan(
-                          text: "Sign In",
+                          text: "Sign Up",
                           style: TextStyle(
                               color: AppTheme.higlightColor, fontSize: 20.0))
                     ])),
@@ -130,7 +130,7 @@ class _TextFieldAreaState extends State<TextFieldArea> {
             controller: _emailController,
             hint: "Enter Email",
             icon: Icons.email,
-            keyboarType: TextInputType.number,
+            keyboarType: TextInputType.emailAddress,
           ),
           box(20),
           CustomTextField(

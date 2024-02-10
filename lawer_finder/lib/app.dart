@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
 import 'app/routes.dart';
 import 'app/theme.dart';
 import 'bindings/initial-binding.dart';
