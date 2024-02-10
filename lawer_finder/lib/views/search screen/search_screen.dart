@@ -24,13 +24,13 @@ class _SearchScreenState extends State<SearchScreen> {
 
   @override
   Widget build(BuildContext context) {
-    String searchKeyword = widget.keyword
-        .toLowerCase(); // Convert to lowercase for case-insensitive search
+    String searchKeyword = widget.keyword;
 
-    // Fetch data from Firestore using the search keyword
+
+
     Query query = _firestore
         .collection('search')
-        .where('crime_name', isEqualTo: searchKeyword.toLowerCase());
+        .where('crime_name', isEqualTo: searchKeyword);
 
     return Scaffold(
       backgroundColor: AppTheme.primaryColor.withOpacity(0.9),
@@ -90,6 +90,27 @@ class _SearchScreenState extends State<SearchScreen> {
                   Divider(),
                   Center(
                     child: Text(
+                      'Crime Solution',
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 6,
+                  ),
+                  Text(
+                    'Crime Solution: ${firstDocument['details']}',
+                    style: TextStyle(
+                      fontSize: 13,
+                      color: Colors.white,
+                    ),
+                  ),
+                  Divider(),
+                  Center(
+                    child: Text(
                       'Lawyer Suggest',
                       style: TextStyle(
                         fontSize: 18,
@@ -106,19 +127,19 @@ class _SearchScreenState extends State<SearchScreen> {
                         children: [
                           CustomRichText(
                             title: 'Lawyer Name:',
-                            subtitle: firstDocument['lawyerName'],
+                            subtitle: '${firstDocument['lawyer']}',
                           ),
                           CustomRichText(
                             title: 'Phone:',
-                            subtitle: firstDocument['lawyerPhone'],
+                            subtitle: 'jkxfgba',
                           ),
                           CustomRichText(
                             title: 'Case Handle Area:',
-                            subtitle: firstDocument['caseHandleArea'],
+                            subtitle: 'cskjfb',
                           ),
                           CustomRichText(
                             title: 'Office Location',
-                            subtitle: firstDocument['officeLocation'],
+                            subtitle: 'kdsjf',
                           ),
                           SizedBox(height: 10),
                           Row(
