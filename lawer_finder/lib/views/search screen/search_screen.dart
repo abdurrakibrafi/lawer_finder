@@ -72,6 +72,17 @@ class _SearchScreenState extends State<SearchScreen> {
               ),
             ),
             SizedBox(height: 20),
+            Divider(),
+            Center(
+              child: Text(
+                'Lawyer Suggest',
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                ),
+              ),
+            ),
             Card(
               child: Padding(
                 padding: const EdgeInsets.all(16.0),
