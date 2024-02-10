@@ -4,9 +4,10 @@ import 'package:lawer_finder/app/theme.dart';
 import 'package:lawer_finder/utils/theme/theme.dart';
 import 'package:lawer_finder/widgets/text.dart';
 import 'package:lottie/lottie.dart';
-import 'package:avatar_glow/avatar_glow.dart';
-import 'package:speech_to_text/speech_to_text.dart' as stt;
 import '../../utils/size/size.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'package:speech_to_text/speech_recognition_result.dart';
+import 'package:speech_to_text/speech_to_text.dart';
 
 class HomeView extends StatefulWidget {
   const HomeView({super.key});
@@ -16,46 +17,77 @@ class HomeView extends StatefulWidget {
 }
 
 class _HomeViewState extends State<HomeView> {
-  final stt.SpeechToText _speech = stt.SpeechToText();
-  bool _isListening = false;
-  bool _isTyping = false;
-  String _text = '';
+  final SpeechToText _speechToText = SpeechToText();
+  bool _speechEnabled = false;
+  String _lastWords = "";
+  final TextEditingController _textController = TextEditingController();
 
-  void _listen() async {
-    if (!_isListening) {
-      bool available = await _speech.initialize(
-        onStatus: (val) {
-          print('onStatus: $val');
-          if (val == 'done') {
-            setState(() => _isListening = false);
-
-            // ScaffoldMessenger.of(context).showMaterialBanner(MaterialBanner(
-            //   content: Text(_text),
-            //   actions: [
-            //     PText(
-            //       text: "Your Voice",
-            //       color: AppTheme.whiteColor,
-            //     )
-            //   ],
-            //   backgroundColor: AppTheme.higlightColor,
-            // ));
-          }
-        },
-        onError: (val) => print('onError: $val'),
-      );
-      if (available) {
-        setState(() => _isListening = true);
-        _speech.listen(
-          onResult: (val) => setState(() {
-            _text = val.recognizedWords;
-            if (val.hasConfidenceRating && val.confidence > 0) {}
-          }),
-        );
-      }
-    } else {
-      setState(() => _isListening = false);
-      _speech.stop();
+  void listenForPermissions() async {
+    final status = await Permission.microphone.status;
+    switch (status) {
+      case PermissionStatus.denied:
+        requestForPermission();
+        break;
+      case PermissionStatus.granted:
+        break;
+      case PermissionStatus.limited:
+        break;
+      case PermissionStatus.permanentlyDenied:
+        break;
+      case PermissionStatus.restricted:
+        break;
+      case PermissionStatus.provisional:
+      // TODO: Handle this case.
     }
+  }
+
+  Future<void> requestForPermission() async {
+    await Permission.microphone.request();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    listenForPermissions();
+    if (!_speechEnabled) {
+      _initSpeech();
+    }
+  }
+
+  /// This has to happen only once per app
+  void _initSpeech() async {
+    _speechEnabled = await _speechToText.initialize();
+  }
+
+  /// Each time to start a speech recognition session
+  void _startListening() async {
+    await _speechToText.listen(
+      onResult: _onSpeechResult,
+      listenFor: const Duration(seconds: 30),
+      localeId: "en_En",
+      cancelOnError: false,
+      partialResults: false,
+      listenMode: ListenMode.confirmation,
+    );
+    setState(() {});
+  }
+
+  /// Manually stop the active speech recognition session
+  /// Note that there are also timeouts that each platform enforces
+  /// and the SpeechToText plugin supports setting timeouts on the
+  /// listen method.
+  void _stopListening() async {
+    await _speechToText.stop();
+    setState(() {});
+  }
+
+  /// This is the callback that the SpeechToText plugin calls when
+  /// the platform returns recognized words.
+  void _onSpeechResult(SpeechRecognitionResult result) {
+    setState(() {
+      _lastWords = "$_lastWords${result.recognizedWords} ";
+      _textController.text = _lastWords;
+    });
   }
 
   @override
@@ -126,10 +158,6 @@ class _HomeViewState extends State<HomeView> {
                 ],
               ),
               box(20),
-              PText(
-                text: _text,
-                color: AppTheme.whiteColor,
-              ),
               const Expanded(child: SizedBox()),
               bottomWidget()
             ],
@@ -152,61 +180,80 @@ class _HomeViewState extends State<HomeView> {
           Expanded(
               child: Padding(
             padding: const EdgeInsets.only(bottom: 8.0),
-            child: TextField(
-              controller: TextEditingController(),
-              autofocus: false,
-              style: const TextStyle(color: AppTheme.whiteColor),
-              maxLines: 5,
-              minLines: 1,
-              onChanged: ((value) {
-                if (value.isEmpty) {
-                  _isTyping = false;
-                } else {
-                  _isTyping = true;
-                }
-                setState(() {});
-              }),
-              cursorColor: AppTheme.higlightColor,
-              decoration: const InputDecoration.collapsed(
-                  hintText: 'Type here....',
-                  hintStyle: TextStyle(
-                      color: AppTheme.whiteColor,
-                      fontSize: 15.0,
-                      fontWeight: FontWeight.w200)),
+            child: ListView(
+              shrinkWrap: true,
+              padding: const EdgeInsets.all(12),
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Expanded(
+                      child: TextField(
+                        controller: _textController,
+                        minLines: 1,
+                        maxLines: 1,
+                        decoration: InputDecoration(
+                          filled: true,
+                          fillColor: AppTheme.whiteColor.withOpacity(0.2),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(
+                      width: 8,
+                    ),
+                    FloatingActionButton.small(
+                      onPressed:
+                          // If not yet listening for speech start, otherwise stop
+                          _speechToText.isNotListening
+                              ? _startListening
+                              : _stopListening,
+                      tooltip: 'Listen',
+                      backgroundColor: Colors.blueGrey,
+                      child: Icon(
+                        _speechToText.isNotListening
+                            ? Icons.mic_off
+                            : Icons.mic,
+                        color: Colors.amber,
+                      ),
+                    )
+                  ],
+                ),
+              ],
             ),
           )),
-          AvatarGlow(
-            animate: _isTyping ? false : _isListening,
-            glowColor: AppTheme.whiteColor,
-            endRadius: 30.0,
-            duration: const Duration(milliseconds: 2000),
-            repeatPauseDuration: const Duration(milliseconds: 100),
-            repeat: true,
-            child: SizedBox(
-              height: 40.0,
-              child: FloatingActionButton(
-                  elevation: 0.0,
-                  backgroundColor: AppTheme.higlightColor,
-                  onPressed: (() {
-                    if (_isTyping) {
-                      // chats.add(_chatController.text);
-                      // _chatController.clear();
-                      _isTyping = false;
-                    } else {
-                      _listen();
-                    }
-                    setState(() {});
-                  }),
-                  child: _isTyping
-                      ? const Icon(Icons.send_outlined)
-                      : SizedBox(
-                          child: Icon(
-                            _isListening ? Icons.mic : Icons.mic_none,
-                            size: 30,
-                          ),
-                        )),
-            ),
-          ),
+          // AvatarGlow(
+          //   animate: _isTyping ? false : _isListening,
+          //   glowColor: AppTheme.whiteColor,
+          //   endRadius: 30.0,
+          //   duration: const Duration(milliseconds: 2000),
+          //   repeatPauseDuration: const Duration(milliseconds: 100),
+          //   repeat: true,
+          //   child: SizedBox(
+          //     height: 40.0,
+          //     child: FloatingActionButton(
+          //         elevation: 0.0,
+          //         backgroundColor: AppTheme.higlightColor,
+          //         onPressed: (() {
+          //           if (_isTyping) {
+          //             // chats.add(_chatController.text);
+          //             // _chatController.clear();
+          //             _isTyping = false;
+          //           } else {
+          //             _listen();
+          //           }
+          //           setState(() {});
+          //         }),
+          //         child: _isTyping
+          //             ? const Icon(Icons.send_outlined)
+          //             : SizedBox(
+          //                 child: Icon(
+          //                   _isListening ? Icons.mic : Icons.mic_none,
+          //                   size: 30,
+          //                 ),
+          //               )),
+          //   ),
+          // ),
         ],
       ),
     );

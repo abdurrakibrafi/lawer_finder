@@ -12,7 +12,7 @@ class AppRoute {
   static const bottomNavRoute = '/bottomNav';
 
   static List<GetPage<dynamic>> routes = [
-    GetPage(name: initialRoute, page: () => const SpeechToTextPage()),
+    GetPage(name: initialRoute, page: () => const SplashView()),
     GetPage(name: loginRoute, page: () => const LoginPage()),
     GetPage(name: registrationRoute, page: () => const RegistrationPage()),
     GetPage(name: bottomNavRoute, page: () => const BottomNaviApp()),
