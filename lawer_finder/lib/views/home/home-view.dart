@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:lawer_finder/app/constants.dart';
 import 'package:lawer_finder/app/theme.dart';
 import 'package:lawer_finder/utils/theme/theme.dart';
+import 'package:lawer_finder/views/search%20screen/search_screen.dart';
 import 'package:lawer_finder/widgets/text.dart';
 import 'package:lottie/lottie.dart';
 import '../../utils/size/size.dart';
@@ -39,7 +40,6 @@ class _HomeViewState extends State<HomeView> {
       case PermissionStatus.restricted:
         break;
       case PermissionStatus.provisional:
-      // TODO: Handle this case.
     }
   }
 
@@ -56,12 +56,10 @@ class _HomeViewState extends State<HomeView> {
     }
   }
 
-  /// This has to happen only once per app
   void _initSpeech() async {
     _speechEnabled = await _speechToText.initialize();
   }
 
-  /// Each time to start a speech recognition session
   void _startListening() async {
     await _speechToText.listen(
       onResult: _onSpeechResult,
@@ -74,10 +72,6 @@ class _HomeViewState extends State<HomeView> {
     setState(() {});
   }
 
-  /// Manually stop the active speech recognition session
-  /// Note that there are also timeouts that each platform enforces
-  /// and the SpeechToText plugin supports setting timeouts on the
-  /// listen method.
   void _stopListening() async {
     await _speechToText.stop();
     setState(() {});
@@ -135,12 +129,12 @@ class _HomeViewState extends State<HomeView> {
                 children: [
                   const Expanded(
                     child: HomeCrimeTypeItem(
-                        title: "Crime", subtitle: "Know Aboute Crime"),
+                        title: "Crime", subtitle: "Know About Crime"),
                   ),
                   box(20),
                   const Expanded(
                     child: HomeCrimeTypeItem(
-                        title: "Civil", subtitle: "Know Aboute Civil"),
+                        title: "Civil", subtitle: "Know About Civil"),
                   ),
                 ],
               ),
@@ -223,10 +217,19 @@ class _HomeViewState extends State<HomeView> {
                     const SizedBox(
                       width: 8,
                     ),
-                    Icon(
-                      Icons.send,
-                      color: Colors.amber,
-                      size: 32,
+                    InkWell(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => SearchScreen()),
+                        );
+                      },
+                      child: Icon(
+                        Icons.send,
+                        color: Colors.amber,
+                        size: 32,
+                      ),
                     )
                   ],
                 ),
