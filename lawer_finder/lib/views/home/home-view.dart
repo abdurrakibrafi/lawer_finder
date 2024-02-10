@@ -150,12 +150,12 @@ class _HomeViewState extends State<HomeView> {
                 children: [
                   const Expanded(
                     child: HomeCrimeTypeItem(
-                        title: "Family", subtitle: "Know Aboute Family"),
+                        title: "Family", subtitle: "Know About Family"),
                   ),
                   box(20),
                   const Expanded(
                     child: HomeCrimeTypeItem(
-                        title: "Property", subtitle: "Know Aboute Property"),
+                        title: "Property", subtitle: "Know About Property"),
                   ),
                 ],
               ),
