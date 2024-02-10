@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:lawer_finder/app/constants.dart';
 import 'package:lawer_finder/app/theme.dart';
+import 'package:get/get.dart';
 import 'package:lawer_finder/utils/theme/theme.dart';
 import 'package:lawer_finder/views/search%20screen/search_screen.dart';
 import 'package:lawer_finder/widgets/text.dart';
@@ -219,11 +220,23 @@ class _HomeViewState extends State<HomeView> {
                     ),
                     InkWell(
                       onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => SearchScreen()),
-                        );
+                        if (_textController.text.isEmpty) {
+                          Get.snackbar(
+                            'Error',
+                            'Please Enter voice or Text its required',
+                            snackPosition: SnackPosition.TOP,
+                            backgroundColor: Colors.red,
+                            colorText: Colors.white,
+                          );
+                        } else {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => SearchScreen(
+                                      keyword: _textController.text,
+                                    )),
+                          );
+                        }
                       },
                       child: Icon(
                         Icons.send,
