@@ -189,7 +189,8 @@ class _TextFieldAreaState extends State<TextFieldArea> {
         backgroundColor: Colors.green,
         colorText: Colors.white,
       );
-      Get.toNamed(AppRoute.bottomNavRoute);
+      Get.toNamed(AppRoute.bottomNavRoute, arguments: {'email': email});
+
     } else {
       Get.snackbar(
         'Error',

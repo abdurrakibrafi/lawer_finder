@@ -15,6 +15,16 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
+  String? userEmail;
+
+  @override
+  void initState() {
+    super.initState();
+
+    Map arguments = Get.arguments ?? {};
+    userEmail = arguments['email'] ?? '';
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -42,12 +52,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
               children: [
                 CircleAvatar(
                   radius: 60.0,
-                  backgroundImage: AssetImage(
-                      'assets/profile.png'), // Replace with your image asset
+                  backgroundImage: AssetImage('assets/profile.png'),
                 ),
                 SizedBox(height: 16.0),
                 Text(
-                  'Your Name',
+                  'Profile',
                   style: TextStyle(
                     fontSize: 20.0,
                     fontWeight: FontWeight.bold,
@@ -55,10 +64,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ),
                 SizedBox(height: 8.0),
                 Text(
-                  'your.email@example.com',
+                  userEmail!,
                   style: TextStyle(
                     fontSize: 16.0,
-                    color: Colors.grey,
+                    color: Colors.black.withOpacity(0.7),
                   ),
                 ),
                 SizedBox(height: 16.0),
@@ -72,6 +81,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     SizedBox(width: 16.0),
                     ElevatedButton(
                       onPressed: () {
+                        Get.snackbar(
+                          'Success',
+                          'Logout successfully Done',
+                          snackPosition: SnackPosition.TOP,
+                          backgroundColor: Colors.green,
+                          colorText: Colors.white,
+                        );
                         Get.offAll(() => LoginPage());
                       },
                       style: ButtonStyle(

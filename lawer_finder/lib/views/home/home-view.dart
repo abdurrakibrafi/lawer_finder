@@ -73,6 +73,7 @@ class _HomeViewState extends State<HomeView> {
     setState(() {});
   }
 
+
   void _stopListening() async {
     await _speechToText.stop();
     setState(() {});
@@ -82,8 +83,11 @@ class _HomeViewState extends State<HomeView> {
   /// the platform returns recognized words.
   void _onSpeechResult(SpeechRecognitionResult result) {
     setState(() {
-      _lastWords = "$_lastWords${result.recognizedWords} ";
+      _lastWords = result.recognizedWords;
       _textController.text = _lastWords;
+
+      // Stop listening after the first result
+      _stopListening();
     });
   }
 
