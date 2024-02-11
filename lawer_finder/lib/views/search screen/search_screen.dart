@@ -26,11 +26,9 @@ class _SearchScreenState extends State<SearchScreen> {
   Widget build(BuildContext context) {
     String searchKeyword = widget.keyword;
 
-
-
     Query query = _firestore
         .collection('search')
-        .where('crime_name', isEqualTo: searchKeyword);
+        .where('crime_name', arrayContains: searchKeyword);
 
     return Scaffold(
       backgroundColor: AppTheme.primaryColor.withOpacity(0.9),
@@ -42,133 +40,129 @@ class _SearchScreenState extends State<SearchScreen> {
           fontSize: 24.0,
         ),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: StreamBuilder(
-          stream: query.snapshots(),
-          builder: (context, snapshot) {
-            if (snapshot.hasData) {
-              var documents = snapshot.data!.docs;
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: StreamBuilder(
+            stream: query.snapshots(),
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                var documents = snapshot.data!.docs;
 
-              if (documents.isEmpty) {
-                return Center(
-                  child: Text(
-                    'No results found for "$searchKeyword"',
-                    style: TextStyle(
-                      fontSize: 18,
-                      color: Colors.white,
+                if (documents.isEmpty) {
+                  return Center(
+                    child: Text(
+                      'No results found for "$searchKeyword"',
+                      style: TextStyle(
+                        fontSize: 18,
+                        color: Colors.white,
+                      ),
                     ),
-                  ),
+                  );
+                }
+
+                var firstDocument = documents[0];
+
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Center(
+                      child: Text(
+                        'Crime Name: ${firstDocument['name of crime']}',
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 6,
+                    ),
+                    Text(
+                      'Crime Details: ${firstDocument['details']}',
+                      style: TextStyle(
+                        fontSize: 13,
+                        color: Colors.white,
+                      ),
+                    ),
+                    Divider(),
+                    Center(
+                      child: Text(
+                        'Crime Solution',
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 6,
+                    ),
+                    Text(
+                      'Crime Solution: ${firstDocument['solution']}',
+                      style: TextStyle(
+                        fontSize: 13,
+                        color: Colors.white,
+                      ),
+                    ),
+                    Divider(),
+                    Center(
+                      child: Text(
+                        'Lawyer Suggest',
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                    Card(
+                      child: Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            CustomRichText(
+                              title: 'Lawyer Name:',
+                              subtitle: '${firstDocument['lawyer']}',
+                            ),
+                            CustomRichText(
+                              title: 'Phone:',
+                              subtitle: '${firstDocument['phone']}',
+                            ),
+                            CustomRichText(
+                              title: 'Case Handle Area:',
+                              subtitle: '${firstDocument['case_area_lawer']}',
+                            ),
+                            SizedBox(height: 10),
+                            Row(
+                              children: [
+                                ElevatedButton(
+                                  onPressed: () {},
+                                  child: Text("Message"),
+                                ),
+                                SizedBox(width: 20),
+                                ElevatedButton(
+                                  onPressed: () {
+
+                                  },
+                                  child: Text("Call"),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
                 );
+              } else {
+                return Center(child: CircularProgressIndicator());
               }
-
-              var firstDocument = documents[0];
-
-              return Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Center(
-                    child: Text(
-                      'Crime Name: ${firstDocument['crime_name']}',
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    height: 6,
-                  ),
-                  Text(
-                    'Crime Details: ${firstDocument['details']}',
-                    style: TextStyle(
-                      fontSize: 13,
-                      color: Colors.white,
-                    ),
-                  ),
-                  Divider(),
-                  Center(
-                    child: Text(
-                      'Crime Solution',
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    height: 6,
-                  ),
-                  Text(
-                    'Crime Solution: ${firstDocument['details']}',
-                    style: TextStyle(
-                      fontSize: 13,
-                      color: Colors.white,
-                    ),
-                  ),
-                  Divider(),
-                  Center(
-                    child: Text(
-                      'Lawyer Suggest',
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                      ),
-                    ),
-                  ),
-                  Card(
-                    child: Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          CustomRichText(
-                            title: 'Lawyer Name:',
-                            subtitle: '${firstDocument['lawyer']}',
-                          ),
-                          CustomRichText(
-                            title: 'Phone:',
-                            subtitle: 'jkxfgba',
-                          ),
-                          CustomRichText(
-                            title: 'Case Handle Area:',
-                            subtitle: 'cskjfb',
-                          ),
-                          CustomRichText(
-                            title: 'Office Location',
-                            subtitle: 'kdsjf',
-                          ),
-                          SizedBox(height: 10),
-                          Row(
-                            children: [
-                              ElevatedButton(
-                                onPressed: () {
-                                  // Implement action for message button
-                                },
-                                child: Text("Message"),
-                              ),
-                              SizedBox(width: 20),
-                              ElevatedButton(
-                                onPressed: () {
-                                  // Implement action for call button
-                                },
-                                child: Text("Call"),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ],
-              );
-            } else {
-              return Center(child: CircularProgressIndicator());
-            }
-          },
+            },
+          ),
         ),
       ),
     );

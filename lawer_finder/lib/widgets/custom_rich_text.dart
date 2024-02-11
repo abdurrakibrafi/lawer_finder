@@ -17,7 +17,7 @@ class CustomRichText extends StatelessWidget {
   Widget build(BuildContext context) {
     List<String> words = subtitle.split(' ');
     String truncatedSubtitle =
-    words.length <= 4 ? subtitle : '${words.sublist(0, 5).join(' ')}...';
+    words.length <= 4 ? subtitle : '${words.sublist(0, 9).join(' ')}...';
     return RichText(
       text: TextSpan(
         children: [

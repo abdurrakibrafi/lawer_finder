@@ -66,14 +66,15 @@ class _LawerListScreenState extends State<LawerListScreen> {
                   return CircularProgressIndicator();
                 }
 
-                return ListView.separated(
+                return ListView.builder(
                   itemCount: snapshot.data!.docs.length,
-                  separatorBuilder: (context, index) => Divider(
-                    color: Colors.grey,
-                    height: 1,
-                  ),
                   itemBuilder: (context, index) {
+                    if (index < 0 || index >= snapshot.data!.docs.length) {
+                      return SizedBox.shrink();
+                    }
+
                     var lawerData = snapshot.data!.docs[index];
+
                     return Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: SizedBox(
@@ -92,12 +93,12 @@ class _LawerListScreenState extends State<LawerListScreen> {
                                 subtitle: lawerData['phone'],
                               ),
                               CustomRichText(
-                                title: 'Case Handle Area:',
-                                subtitle: lawerData['case'],
-                              ),
-                              CustomRichText(
                                 title: 'Office Location',
                                 subtitle: lawerData['office'],
+                              ),
+                              CustomRichText(
+                                title: 'Experience ',
+                                subtitle: lawerData['expericne'],
                               ),
                               SizedBox(
                                 height: 10,
@@ -106,9 +107,9 @@ class _LawerListScreenState extends State<LawerListScreen> {
                                 children: [
                                   ElevatedButton(
                                     onPressed: () {
-                                      // Implement your hire logic
+                                      // Implement your message logic
                                     },
-                                    child: Text("Hire Me"),
+                                    child: Text("Message"),
                                   ),
                                   SizedBox(
                                     width: 20,
@@ -117,7 +118,7 @@ class _LawerListScreenState extends State<LawerListScreen> {
                                     onPressed: () {
                                       // Implement your call logic
                                     },
-                                    child: Text("Call Me"),
+                                    child: Text("Call"),
                                   ),
                                 ],
                               ),
