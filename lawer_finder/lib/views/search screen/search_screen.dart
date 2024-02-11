@@ -6,6 +6,7 @@ import 'package:lawer_finder/app/constants.dart';
 import 'package:lawer_finder/app/theme.dart';
 import 'package:lawer_finder/widgets/custom_rich_text.dart';
 import 'package:lawer_finder/widgets/text.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class SearchScreen extends StatefulWidget {
   final String keyword;
@@ -140,13 +141,31 @@ class _SearchScreenState extends State<SearchScreen> {
                             Row(
                               children: [
                                 ElevatedButton(
-                                  onPressed: () {},
+                                  onPressed: () async {
+                                    final Uri url = Uri(
+                                        scheme: 'sms',
+                                        path: firstDocument['phone']);
+
+                                    if (await launchUrl(url)) {
+                                      await launchUrl(url);
+                                    } else {
+                                      throw 'Could not launch $url';
+                                    }
+                                  },
                                   child: Text("Message"),
                                 ),
                                 SizedBox(width: 20),
                                 ElevatedButton(
-                                  onPressed: () {
+                                  onPressed: () async {
+                                    final Uri url = Uri(
+                                        scheme: 'sms',
+                                        path: firstDocument['phone']);
 
+                                    if (await launchUrl(url)) {
+                                      await launchUrl(url);
+                                    } else {
+                                      throw 'Could not launch $url';
+                                    }
                                   },
                                   child: Text("Call"),
                                 ),

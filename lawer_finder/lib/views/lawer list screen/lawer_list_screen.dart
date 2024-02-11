@@ -6,6 +6,7 @@ import 'package:lawer_finder/app/theme.dart';
 import 'package:lawer_finder/widgets/custom_rich_text.dart';
 import 'package:lawer_finder/widgets/text.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class LawerListScreen extends StatefulWidget {
   const LawerListScreen({Key? key}) : super(key: key);
@@ -85,7 +86,7 @@ class _LawerListScreenState extends State<LawerListScreen> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               CustomRichText(
-                                title: 'Lawer Name:',
+                                title: 'Lawyer Name:',
                                 subtitle: lawerData['lawer_name'],
                               ),
                               CustomRichText(
@@ -106,8 +107,16 @@ class _LawerListScreenState extends State<LawerListScreen> {
                               Row(
                                 children: [
                                   ElevatedButton(
-                                    onPressed: () {
-                                      // Implement your message logic
+                                    onPressed: () async {
+                                      final Uri url = Uri(
+                                          scheme: 'sms',
+                                          path: lawerData['phone']);
+
+                                      if (await launchUrl(url)) {
+                                        await launchUrl(url);
+                                      } else {
+                                        throw 'Could not launch $url';
+                                      }
                                     },
                                     child: Text("Message"),
                                   ),
@@ -115,8 +124,16 @@ class _LawerListScreenState extends State<LawerListScreen> {
                                     width: 20,
                                   ),
                                   ElevatedButton(
-                                    onPressed: () {
-                                      // Implement your call logic
+                                    onPressed: () async {
+                                      final Uri url = Uri(
+                                          scheme: 'tel',
+                                          path: lawerData['phone']);
+
+                                      if (await launchUrl(url)) {
+                                        await launchUrl(url);
+                                      } else {
+                                        throw 'Could not launch $url';
+                                      }
                                     },
                                     child: Text("Call"),
                                   ),

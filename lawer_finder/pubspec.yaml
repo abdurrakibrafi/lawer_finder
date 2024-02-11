@@ -39,7 +39,7 @@ dev_dependencies:
   speech_to_text: ^6.5.1
   fluttertoast: ^8.0.7
   permission_handler: ^9.2.0
-  fuzzy: ^0.5.1
+  url_launcher: ^6.0.3
 
 
 
