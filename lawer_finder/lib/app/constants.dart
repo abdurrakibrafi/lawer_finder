@@ -5,4 +5,5 @@ class AppConstant {
   static const String lawerTitle = "Lawyer List";
   static const String myProfile = "My Profile";
   static const String searchScreen = "Search Result";
+  static const String editProfile = "Profile Edit";
 }

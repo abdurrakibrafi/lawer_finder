@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:lawer_finder/app/constants.dart';
 import 'package:lawer_finder/app/theme.dart';
 import 'package:lawer_finder/views/login/login-view.dart';
+import 'package:lawer_finder/views/profile/edit_profile.dart';
 import 'package:lawer_finder/widgets/text.dart';
 import 'package:get/get.dart';
 
@@ -75,7 +76,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     ElevatedButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        Get.to(() => EditProfile());
+                      },
                       child: Text('Edit Profile'),
                     ),
                     SizedBox(width: 16.0),

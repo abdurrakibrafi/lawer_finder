@@ -73,7 +73,6 @@ class _HomeViewState extends State<HomeView> {
     setState(() {});
   }
 
-
   void _stopListening() async {
     await _speechToText.stop();
     setState(() {});
@@ -111,6 +110,7 @@ class _HomeViewState extends State<HomeView> {
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
+              box(20),
               CircleAvatar(
                 backgroundColor: AppTheme.whiteColor,
                 radius: 35,
@@ -122,13 +122,7 @@ class _HomeViewState extends State<HomeView> {
                       fit: BoxFit.cover),
                 ),
               ),
-              box(10),
-              PText(
-                text: "Give Me Your Law :)",
-                fontSize: 20.0,
-                color: AppTheme.whiteColor,
-              ),
-              box(30),
+              box(20),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -137,28 +131,12 @@ class _HomeViewState extends State<HomeView> {
                         title: "Crime", subtitle: "Know About Crime"),
                   ),
                   box(20),
-                  const Expanded(
-                    child: HomeCrimeTypeItem(
-                        title: "Civil", subtitle: "Know About Civil"),
-                  ),
                 ],
               ),
               box(20),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  const Expanded(
-                    child: HomeCrimeTypeItem(
-                        title: "Family", subtitle: "Know About Family"),
-                  ),
-                  box(20),
-                  const Expanded(
-                    child: HomeCrimeTypeItem(
-                        title: "Property", subtitle: "Know About Property"),
-                  ),
-                ],
+              SizedBox(
+                height: 10,
               ),
-              box(20),
               SizedBox(
                 width: 80,
                 height: 56,
@@ -175,7 +153,7 @@ class _HomeViewState extends State<HomeView> {
                   ),
                 ),
               ),
-              const Expanded(child: SizedBox()),
+              SizedBox(height: 40),
               bottomWidget()
             ],
           ),
