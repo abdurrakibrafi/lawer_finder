@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/get_core.dart';
@@ -86,15 +88,7 @@ class _EditProfileState extends State<EditProfile> {
             CustomButton(
               width: sSize().width,
               height: 40.0,
-              onTap: () {
-                Get.snackbar(
-                  'Wait',
-                  'Up Coming',
-                  snackPosition: SnackPosition.TOP,
-                  backgroundColor: Colors.red,
-                  colorText: Colors.white,
-                );
-              },
+              onTap: () {},
               widget: PText(
                 text: "Update Profile",
                 color: AppTheme.whiteColor,
@@ -104,5 +98,67 @@ class _EditProfileState extends State<EditProfile> {
         ),
       ),
     );
+  }
+
+  void _updateProfile() async {
+    String newName = nameC.text;
+    String newEmail = emailC.text;
+    String newPhone = phoneC.text;
+    String newPassword = passC.text;
+
+    try {
+      // Get the current user from Firebase Authentication
+      User? currentUser = FirebaseAuth.instance.currentUser;
+
+      // Update user's profile information in Firestore
+      await FirebaseFirestore.instance
+          .collection('users')
+          .doc(currentUser?.uid)
+          .update({
+        'username': newName,
+        'email': newEmail,
+        'phoneNumber': newPhone,
+      });
+
+      await currentUser?.updateDisplayName(newName);
+
+      if (currentUser?.email != newEmail) {
+        await currentUser?.updateEmail(newEmail);
+        await currentUser?.sendEmailVerification();
+
+        await FirebaseAuth.instance.signOut();
+
+        Get.snackbar(
+          'Success',
+          'Profile Updated successfully. Please verify the new email before logging in again.',
+          snackPosition: SnackPosition.TOP,
+          backgroundColor: Colors.green,
+          colorText: Colors.white,
+        );
+      } else {
+        if (newPassword.isNotEmpty) {
+          await currentUser?.updatePassword(newPassword);
+        }
+
+        // Show a success snackbar
+        Get.snackbar(
+          'Success',
+          'Profile Updated successfully',
+          snackPosition: SnackPosition.TOP,
+          backgroundColor: Colors.green,
+          colorText: Colors.white,
+        );
+      }
+    } catch (error) {
+      print('Error updating profile: $error');
+
+      Get.snackbar(
+        'Error',
+        'Failed to update profile. Please try again.',
+        snackPosition: SnackPosition.TOP,
+        backgroundColor: Colors.red,
+        colorText: Colors.white,
+      );
+    }
   }
 }

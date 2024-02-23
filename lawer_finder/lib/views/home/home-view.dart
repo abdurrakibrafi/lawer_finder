@@ -5,6 +5,7 @@ import 'package:lawer_finder/app/constants.dart';
 import 'package:lawer_finder/app/theme.dart';
 import 'package:get/get.dart';
 import 'package:lawer_finder/utils/theme/theme.dart';
+import 'package:lawer_finder/views/cyber%20crime/cyber_crime_list.dart';
 import 'package:lawer_finder/views/search%20screen/search_screen.dart';
 import 'package:lawer_finder/widgets/text.dart';
 import 'package:lottie/lottie.dart';
@@ -126,9 +127,15 @@ class _HomeViewState extends State<HomeView> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  const Expanded(
-                    child: HomeCrimeTypeItem(
-                        title: "Crime", subtitle: "Know About Crime"),
+                  Expanded(
+                    child: InkWell(
+                      onTap: () {
+                        Get.to(() => CyberList());
+                      },
+                      child: HomeCrimeTypeItem(
+                          title: " Cyber Crime List",
+                          subtitle: "Know About Crime"),
+                    ),
                   ),
                   box(20),
                 ],
